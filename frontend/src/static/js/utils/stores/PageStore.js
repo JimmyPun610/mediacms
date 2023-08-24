@@ -93,8 +93,8 @@ class PageStore extends EventEmitter {
 
   get(type) {
     let r;
-
     switch (type) {
+
       case 'browser-cache':
         r = browserCache;
         break;
@@ -117,6 +117,10 @@ class PageStore extends EventEmitter {
         r = mediacms_config.site;
         break;
       case 'api-playlists':
+        r = mediacms_api_endpoint_url(type.split('-')[1]);
+        break;
+      case 'api-channels':
+        // not sure why not working in production
         r = mediacms_api_endpoint_url(type.split('-')[1]);
         break;
       case 'notifications-size':

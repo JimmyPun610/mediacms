@@ -36,6 +36,7 @@ export function config(glbl) {
     register: glbl.url.register,
     changePassword: !glbl.user.is.anonymous ? glbl.url.changePassword : '',
     members: glbl.url.members,
+    channels: glbl.url.channels,
     search: {
       base: glbl.url.search,
       query: glbl.url.search + '?q=',
@@ -44,15 +45,17 @@ export function config(glbl) {
     },
     profile: !!glbl.site.devEnv
       ? {
-          media: glbl.user.pages.media,
-          about: glbl.user.pages.about,
-          playlists: glbl.user.pages.playlists,
-        }
+        media: glbl.user.pages.media,
+        about: glbl.user.pages.about,
+        playlists: glbl.user.pages.playlists,
+        channels: glbl.user.pages.channels,
+      }
       : {
-          media: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId,
-          about: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/about',
-          playlists: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/playlists',
-        },
+        media: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId,
+        about: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/about',
+        playlists: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/playlists',
+        channels: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/channels',
+      },
     user: {
       liked: glbl.url.likedMedia,
       history: glbl.url.history,

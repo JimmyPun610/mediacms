@@ -8,7 +8,6 @@ export default class ViewerInfoVideo extends ViewerInfo {
   render() {
     let views, categories, title, author, published, description;
     let allowDownload = false;
-
     if (this.state.videoLoaded) {
       allowDownload = MediaPageStore.get('media-data').allow_download;
 

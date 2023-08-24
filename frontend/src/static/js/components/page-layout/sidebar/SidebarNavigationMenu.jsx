@@ -154,6 +154,13 @@ export function SidebarNavigationMenu() {
           className: 'nav-item-my-playlists',
         });
       }
+
+      items.push({
+        link: userPages.playlists.replace('playlists', 'channels'),
+        icon: 'subscriptions',
+        text: 'My channels',
+        className: 'nav-item-my-channels',
+      })
     }
 
     return items.length ? <NavigationMenuList key="main-second" items={formatItems(items)} /> : null;

@@ -1,6 +1,9 @@
+from argparse import Action
+from crypt import methods
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from drf_yasg import openapi as openapi
@@ -24,7 +27,7 @@ from files.methods import is_mediacms_editor, is_mediacms_manager
 
 from .forms import ChannelForm, UserForm
 from .models import Channel, User
-from .serializers import LoginSerializer, UserDetailSerializer, UserSerializer
+from .serializers import ChannelSerialzer, LoginSerializer, UserDetailSerializer, UserSerializer
 
 
 def get_user(username):
@@ -73,6 +76,18 @@ def view_user_playlists(request, username):
 
     return render(request, "cms/user_playlists.html", context)
 
+def view_user_channels(request, username):
+    context = {}
+    user = get_user(username=username)
+    if not user:
+        return HttpResponseRedirect("/members")
+
+    context["user"] = user
+    context["CAN_EDIT"] = True if ((user and user == request.user) or is_mediacms_manager(request.user)) else False
+    context["CAN_DELETE"] = True if is_mediacms_manager(request.user) else False
+    context["SHOW_CONTACT_FORM"] = True if (user.allow_contact or is_mediacms_editor(request.user)) else False
+
+    return render(request, "cms/user_channels.html", context)
 
 def view_user_about(request, username):
     context = {}
@@ -174,6 +189,45 @@ Sender email: %s\n
 
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+@swagger_auto_schema(
+    methods=['post'],
+    manual_parameters=[],
+    tags=['Channels'],
+    operation_summary='Toggle subscription',
+    operation_description='to be writtern',
+)
+@api_view(["POST"])
+def toggleSubscription(request, friendly_token):
+    channel = Channel.objects.filter(friendly_token=friendly_token).first();
+    if(channel.user_id == request.user.id):
+        return Response({'details': 'You cannot subscribe your own channel.'},status=status.HTTP_400_BAD_REQUEST)
+    # check if channel has this subscriber
+    existingSubscription = channel.subscribers.filter(id=request.user.id).first()
+    if(existingSubscription is None):
+        channel.subscribers.add(request.user);
+        return Response({'details': 'You have successfully subscribe to the channel'},status=status.HTTP_200_OK);
+    else:
+        channel.subscribers.remove(request.user)    
+        return Response({'details': 'You have successfully unsubscribe to the channel'},status=status.HTTP_200_OK);
+
+class Channels(APIView):
+    parser_classes = (JSONParser, MultiPartParser, FormParser, FileUploadParser)
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(name='page', type=openapi.TYPE_INTEGER, in_=openapi.IN_QUERY, description='Page number'),
+        ],
+        tags=['Channels'],
+        operation_summary='List my subscribed channels',
+        operation_description='Paginated listing of my subscribed channels',
+    )
+    def get(self, request):
+        pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
+        paginator = pagination_class()
+        channels = Channel.objects.filter(subscribers__id__contains=self.request.user.id)
+        page = paginator.paginate_queryset(channels, request)
+        serializer = ChannelSerialzer(page, many=True, context={"request": request})
+        return paginator.get_paginated_response(serializer.data)
+            
 
 class UserList(APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)

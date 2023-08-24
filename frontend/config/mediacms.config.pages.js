@@ -17,8 +17,8 @@ const formatPage = (page) => {
   const render = page.renderer
     ? page.renderer
     : page.component
-    ? templates.renderPageContent({ page: { id: pageContentId, component: page.component } })
-    : undefined;
+      ? templates.renderPageContent({ page: { id: pageContentId, component: page.component } })
+      : undefined;
   const headLinks = [
     { rel: 'preload', href: './static/lib/video-js/7.20.2/video.min.js', as: 'script' },
     ...(page.headLinks ? page.headLinks : []),
@@ -61,8 +61,8 @@ const formatStaticPageData = (page) => {
     renderer: page.renderer
       ? page.renderer
       : page.component
-      ? templates.renderPageStaticContent({ page: { id: pageContentId, component: page.component } })
-      : undefined,
+        ? templates.renderPageStaticContent({ page: { id: pageContentId, component: page.component } })
+        : undefined,
   });
 };
 
@@ -156,6 +156,12 @@ const PAGES = {
     id: 'profile-playlists',
     title: 'Profile - Playlist',
     component: 'ProfilePlaylistsPage',
+    global: { profileId: DEV_SAMPLE_DATA.profileId },
+  },
+  'profile-channels': {
+    id: 'profile-channels',
+    title: 'Profile - Channels',
+    component: 'ProfileChannelListPage',
     global: { profileId: DEV_SAMPLE_DATA.profileId },
   },
 };

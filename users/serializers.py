@@ -3,7 +3,20 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from .models import User
+from .models import Channel, User
+
+class ChannelSerialzer(serializers.ModelSerializer):
+    class Meta:
+        model = Channel
+        fields = (
+            "title",
+            "description",
+            "user",
+            "add_date",
+            "subscribers",
+            "friendly_token",
+            "banner_logo",
+        )
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -78,6 +91,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "api_url",
             "edit_url",
             "default_channel_edit_url",
+            "default_channel_friendly_token"
         )
         extra_kwargs = {"name": {"required": False}}
 

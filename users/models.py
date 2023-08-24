@@ -83,6 +83,12 @@ class User(AbstractUser):
             return reverse("edit_channel", kwargs={"friendly_token": c.friendly_token})
         return None
 
+    def default_channel_friendly_token(self):
+        c = self.channels.filter().order_by("add_date").first()
+        if c:
+            return c.friendly_token
+        return None
+    
     @property
     def playlists_info(self):
         ret = []
@@ -158,7 +164,7 @@ class Channel(models.Model):
 def post_user_create(sender, instance, created, **kwargs):
     # create a Channel object upon user creation, name it default
     if created:
-        new = Channel.objects.create(title="default", user=instance)
+        new = Channel.objects.create(title=instance.username, user=instance)
         new.save()
         if settings.ADMINS_NOTIFICATIONS.get("NEW_USER", False):
             title = "[{}] - New user just registered".format(settings.PORTAL_NAME)

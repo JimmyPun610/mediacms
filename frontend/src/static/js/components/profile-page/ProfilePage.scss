@@ -3,6 +3,7 @@
 
 #page-profile-media,
 #page-profile-playlists,
+#page-profile-channels,
 #page-profile-about,
 #page-liked.profile-page-liked,
 #page-history.profile-page-history {
@@ -94,8 +95,7 @@
         transform: none;
         width: 100%;
 
-        @media (min-width: 492px) {
-        }
+        @media (min-width: 492px) {}
 
         @media (min-width: 768px) {
           padding: 0;
@@ -176,8 +176,7 @@
       padding-bottom: calc(100% / 6.2);
     }
 
-    @media screen and (max-width: 339px) {
-    }
+    @media screen and (max-width: 339px) {}
   }
 
   .profile-banner {
@@ -196,7 +195,7 @@
 
   a.edit-channel,
   a.edit-profile,
-  .delete-profile-wrap > button {
+  .delete-profile-wrap>button {
     text-decoration: none;
     font-size: 13px;
     font-weight: 400;
@@ -215,8 +214,7 @@
   }
 
   a.edit-channel,
-  a.edit-profile {
-  }
+  a.edit-profile {}
 
   a.edit-channel {
     top: 16px;
@@ -303,7 +301,7 @@
       display: table;
       width: 100%;
 
-      > * {
+      >* {
         position: relative;
         display: table-cell;
         vertical-align: middle;
@@ -411,14 +409,14 @@
         }
 
         &.media-search {
-          > * {
+          >* {
             position: relative;
             display: table;
             float: left;
             width: auto;
             height: 3rem;
 
-            > span {
+            >span {
               display: table-cell;
               vertical-align: middle;
             }
@@ -480,6 +478,7 @@
   #page-profile-media &,
   #page-profile-about &,
   #page-profile-playlists &,
+  #page-profile-channels &,
   #page-liked.profile-page-liked &,
   #page-history.profile-page-history & {
     padding-bottom: 0;
@@ -508,6 +507,7 @@
 
   .item-content h3 {
     span {
+
       &:after,
       &:before {
         background: var(--profile-page-item-content-title-bg-color);
@@ -530,7 +530,7 @@
       min-height: 0;
     }
 
-    + .items-list-ver.media-list-wrapper {
+    +.items-list-ver.media-list-wrapper {
       .media-list-row {
         margin-top: 32px;
         border-top: 1px solid var(--media-list-row-border-color);
@@ -550,7 +550,7 @@
       max-width: 100%;
       overflow: hidden;
 
-      > span {
+      >span {
         display: inline-block;
         vertical-align: top;
         white-space: pre-wrap;
@@ -566,11 +566,11 @@
         &:last-child {
           font-weight: 500;
 
-          > * {
+          >* {
             display: block;
           }
 
-          > * + * {
+          >*+* {
             &::before {
               display: block;
               content: '';
@@ -593,7 +593,7 @@
 }
 
 .profile-page-content {
-  > * {
+  >* {
     padding-left: 16px !important;
     padding-right: 16px !important;
 
@@ -602,7 +602,7 @@
       padding-right: 0 !important;
     }
 
-    > * {
+    >* {
       padding-bottom: 32px;
     }
   }
@@ -614,8 +614,7 @@
   }
 }
 
-.profile-contact {
-}
+.profile-contact {}
 
 .user-contact-form {
   position: relative;
@@ -672,7 +671,7 @@ $item-width: 218px;
 $side-empty-space: 40px;
 
 $-hor-spaces: 2 * $side-empty-space;
-$-max-width: $-hor-spaces + ( 2 * $item-width ) - 1;
+$-max-width: $-hor-spaces + (2 * $item-width ) - 1;
 
 @media (max-width: $-max-width) {
   #page-profile-about {
@@ -683,7 +682,7 @@ $-max-width: $-hor-spaces + ( 2 * $item-width ) - 1;
   }
 }
 
-@media (min-width: ( ( 2 * $side-empty-space ) + ( 2 * $item-width )  )) and (max-width: 599px) {
+@media (min-width: ((2 * $side-empty-space ) + (2 * $item-width ))) and (max-width: 599px) {
   #page-profile-about {
     .media-list-wrapper.items-list-ver .media-list-row {
       width: calc(2 * var(--default-item-width));
@@ -694,8 +693,10 @@ $-max-width: $-hor-spaces + ( 2 * $item-width ) - 1;
 
 @for $i from 2 through 6 {
   $-hor-spaces: 2 * $side-empty-space;
-  $-min-width: $-hor-spaces + ($i * $item-width);
+  $-min-width: $-hor-spaces +($i * $item-width);
+
   @media (min-width: $-min-width) {
+
     .profile-page-header .profile-info,
     .profile-page-header .profile-nav .profile-nav-inner {
       width: calc(#{$i} * var(--item-width, var(--default-item-width)));
@@ -705,18 +706,20 @@ $-max-width: $-hor-spaces + ( 2 * $item-width ) - 1;
 
 @for $i from 3 through 7 {
   $-hor-spaces: 2 * $side-empty-space;
-  $-min-width: $-hor-spaces + ($i * $item-width);
+  $-min-width: $-hor-spaces +($i * $item-width);
   $j: $i - 1;
+
   @media (min-width: $-min-width) and (min-width: 768px) {
+
     .visible-sidebar .profile-page-header .profile-info,
     .visible-sidebar .profile-page-header .profile-nav .profile-nav-inner {
-      width: calc( #{$j} * var(--item-width, var(--default-item-width)));
+      width: calc(#{$j} * var(--item-width, var(--default-item-width)));
     }
   }
 }
 
 $-hor-spaces: 2 * $side-empty-space;
-$-max-width: $-hor-spaces + ( 2 * $item-width ) - 1;
+$-max-width: $-hor-spaces + (2 * $item-width ) - 1;
 
 @media (max-width: $-max-width ) and (max-width: 709px) {
   .profile-page-header .profile-nav.fixed-nav .profile-nav {

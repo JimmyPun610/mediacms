@@ -1,3 +1,4 @@
+from ctypes.wintypes import BOOL
 from django.urls import path, re_path
 
 from . import views
@@ -16,6 +17,11 @@ urlpatterns = [
         name="get_user_playlists",
     ),
     re_path(
+        r"^user/(?P<username>[\w@.]*)/channels$",
+        views.view_user_channels,
+        name="get_user_channels",
+    ),
+    re_path(
         r"^user/(?P<username>[\w@.]*)/about$",
         views.view_user_about,
         name="get_user_about",
@@ -31,6 +37,7 @@ urlpatterns = [
     path('api/v1/whoami', views.UserWhoami.as_view(), name='user-whoami'),
     path('api/v1/user/token', views.UserToken.as_view(), name='user-token'),
     path('api/v1/login', views.LoginView.as_view(), name='user-login'),
+    path('api/v1/channels', views.Channels.as_view(), name='api_get_channels'),
     re_path(r"^api/v1/users$", views.UserList.as_view(), name="api_users"),
     re_path(r"^api/v1/users/$", views.UserList.as_view()),
     re_path(
@@ -42,5 +49,10 @@ urlpatterns = [
         r"^api/v1/users/(?P<username>[\w@._-]*)/contact",
         views.contact_user,
         name="api_contact_user",
+    ),
+    re_path(
+        r"^api/v1/channels/(?P<friendly_token>[\w@._-]*)/toggle-subscription",
+        views.toggleSubscription,
+        name="api_toggle_subscription",
     ),
 ]

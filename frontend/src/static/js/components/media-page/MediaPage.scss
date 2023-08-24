@@ -6,6 +6,8 @@
   padding-left: 0;
 }
 
+
+
 .media-author-actions {
   .popup-message-bottom {
     button {
@@ -49,7 +51,7 @@
 
   .media-labels-area {
     .media-label-state {
-      > * {
+      >* {
         color: var(--media-title-labels-area-text-color);
         background-color: var(--media-title-labels-area-bg-color);
       }
@@ -67,18 +69,18 @@
   }
 
   .media-actions {
-    > * {
-      > * {
-        > *:not(.popup) {
+    >* {
+      >* {
+        >*:not(.popup) {
           .circle-icon-button {
             &:focus {
-              > * {
+              >* {
                 background-color: var(--media-actions-not-popup-circle-icon-focus-bg-color);
               }
             }
 
             &:active {
-              > * {
+              >* {
                 background-color: var(--media-actions-not-popup-circle-icon-active-bg-color);
               }
             }
@@ -98,6 +100,7 @@
           }
 
           .share-options {
+
             .previous-slide,
             .next-slide {
               .circle-icon-button {
@@ -106,6 +109,7 @@
             }
 
             .sh-option {
+
               a,
               button {
                 color: var(--media-actions-share-options-link-text-color);
@@ -114,7 +118,7 @@
           }
 
           .copy-field {
-            > div {
+            >div {
               border-color: var(--media-actions-share-copy-field-border-color);
               background-color: var(--media-actions-share-copy-field-bg-color);
             }
@@ -127,11 +131,12 @@
 
         &.more-options,
         &.video-downloads {
+
           .nav-page-main,
           .nav-page-mediaStatusInfo,
           .nav-page-videoDownloadOptions {
             .popup {
-              > * {
+              >* {
                 background-color: var(--media-actions-more-options-popup-bg-color);
               }
             }
@@ -140,9 +145,11 @@
           .nav-page-main,
           .nav-page-videoDownloadOptions {
             .popup {
-              > * {
+              >* {
+
                 &.main-options,
                 &.video-download-options {
+
                   .nav-menu a,
                   .nav-menu button {
                     color: var(--media-actions-more-options-popup-nav-link-text-color);
@@ -159,7 +166,7 @@
         &.video-downloads {
           .popup-fullscreen {
             .popup-main {
-              > div {
+              >div {
                 background-color: var(--media-actions-share-fullscreen-popup-main-bg-color);
               }
             }
@@ -214,6 +221,7 @@
 }
 
 .share-embed-inner {
+
   .on-right-top,
   .on-right-bottom {
     border-color: var(--share-embed-inner-on-right-border-color);
@@ -278,12 +286,14 @@
   width: 100%;
 
   max-width: 1280px + (2 * 24);
+
   .viewer-section.viewer-section-nested {
     max-width: 1280px + (2 * 24);
   }
 
   &.viewer-wide {
     max-width: 1754px;
+
     .viewer-section.viewer-section-nested {
       max-width: 1754px;
     }
@@ -328,8 +338,7 @@
   }
 }
 
-.viewer-info {
-}
+.viewer-info {}
 
 .viewer-info-inner {
   @media screen and (min-width: 640px) {
@@ -382,7 +391,7 @@
       margin: 0 auto 12px;
     }
 
-    > * {
+    >* {
       display: table-cell;
       vertical-align: middle;
     }
@@ -429,6 +438,7 @@
 }
 
 @media screen and (min-width: 1216px) {
+
   .viewer-container,
   .viewer-info {
     width: (100 - 32.079) * 1%;
@@ -448,6 +458,7 @@
 }
 
 @media screen and (min-width: 1440px) {
+
   .viewer-container,
   .viewer-info {
     width: (100 - 32.079) * 1%;
@@ -499,8 +510,7 @@
         background: none !important;
       }
 
-      .vjs-big-play-button {
-      }
+      .vjs-big-play-button {}
 
       .vjs-control-bar {
         transform: none !important;
@@ -556,7 +566,7 @@
       color: #888;
     }
 
-    > span {
+    >span {
       position: absolute;
       display: table;
       top: 0;
@@ -585,8 +595,8 @@
     }
   }
 
-  > a,
-  > button {
+  >a,
+  >button {
     position: relative;
     width: auto;
     padding: 8px 16px;
@@ -667,14 +677,14 @@
     .media-labels-area-inner {
       display: table;
 
-      > * {
+      >* {
         display: table-cell;
         vertical-align: middle;
       }
     }
 
     .media-label-state {
-      > * {
+      >* {
         padding: 2px 4px;
         margin-right: 4px;
         font-size: 12px;
@@ -705,7 +715,7 @@
     width: 100%;
     min-height: 40px;
 
-    > * {
+    >* {
       display: table-cell;
       vertical-align: middle;
     }
@@ -717,11 +727,11 @@
   }
 
   .media-actions {
-    > * {
+    >* {
       position: relative;
       float: right;
 
-      > * {
+      >* {
         position: relative;
         width: auto;
         float: left;
@@ -738,11 +748,11 @@
           }
         }
 
-        > *:not(.popup) {
+        >*:not(.popup) {
           display: table;
           cursor: pointer;
 
-          > * {
+          >* {
             display: table-cell;
             vertical-align: middle;
 
@@ -791,13 +801,13 @@
         &.save,
         &.download,
         &.video-downloads {
-          > *:not(.popup) {
+          >*:not(.popup) {
             font-size: 13px;
             font-weight: 500;
             border: 0;
             background: none;
 
-            > * {
+            >* {
               display: inline-block;
             }
           }
@@ -821,11 +831,9 @@
           }
         }
 
-        &.like {
-        }
+        &.like {}
 
-        &.dislike {
-        }
+        &.dislike {}
 
         &.share {
           .scrollable-content {
@@ -857,8 +865,7 @@
               top: 78px;
               z-index: +1;
 
-              .circle-icon-button {
-              }
+              .circle-icon-button {}
             }
 
             .previous-slide {
@@ -887,7 +894,7 @@
                 border: 0;
                 background: none;
 
-                > *:first-child {
+                >*:first-child {
                   display: block;
                   width: 60px;
                   height: 60px;
@@ -898,7 +905,7 @@
                   background-repeat: no-repeat;
                 }
 
-                > *:last-child {
+                >*:last-child {
                   font-size: 13px;
                   line-height: 18px;
                   overflow: hidden;
@@ -916,9 +923,10 @@
             }
 
             .share-embed-opt {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(244, 244, 244);
                 }
 
@@ -929,9 +937,10 @@
             }
 
             .share-fb {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(59, 89, 152);
                   background-image: url('../../../images/social-media-icons/fb-logo.png');
                 }
@@ -939,9 +948,10 @@
             }
 
             .share-tw {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(29, 161, 242);
                   background-image: url('../../../images/social-media-icons/twitter-logo.png');
                 }
@@ -949,9 +959,10 @@
             }
 
             .share-reddit {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(255, 69, 0);
                   background-image: url('../../../images/social-media-icons/reddit-logo.png');
                 }
@@ -959,9 +970,10 @@
             }
 
             .share-tumblr {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(53, 70, 92);
                   background-image: url('../../../images/social-media-icons/tumblr-logo.png');
                 }
@@ -969,9 +981,10 @@
             }
 
             .share-pinterest {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(189, 8, 28);
                   background-image: url('../../../images/social-media-icons/pinterest-logo.png');
                 }
@@ -979,9 +992,10 @@
             }
 
             .share-vk {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(70, 128, 194);
                   background-image: url('../../../images/social-media-icons/vk-logo.png');
                 }
@@ -989,9 +1003,10 @@
             }
 
             .share-linkedin {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(0, 119, 181);
                   background-image: url('../../../images/social-media-icons/linkedin-logo.png');
                 }
@@ -999,9 +1014,10 @@
             }
 
             .share-mix {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(255, 130, 38);
                   background-image: url('../../../images/social-media-icons/mix-logo.png');
                 }
@@ -1009,18 +1025,20 @@
             }
 
             .share-email {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(136, 136, 136);
                 }
               }
             }
 
             .share-whatsapp {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(37, 211, 102);
                   background-image: url('../../../images/social-media-icons/whatsapp-logo.png');
                 }
@@ -1028,9 +1046,10 @@
             }
 
             .share-telegram {
+
               a,
               button {
-                > *:first-child {
+                >*:first-child {
                   background-color: rgb(0, 136, 204);
                   background-position: 11px;
                   background-image: url('../../../images/social-media-icons/telegram-logo.png');
@@ -1045,7 +1064,7 @@
             position: relative;
             width: 100%;
 
-            > div {
+            >div {
               display: block;
               padding-right: $button-width;
               border-width: 1px;
@@ -1100,7 +1119,7 @@
               box-shadow: none;
               background-color: transparent;
 
-              > * {
+              >* {
                 @media screen and (max-width: 1007px) {
                   width: 300px;
                 }
@@ -1113,8 +1132,9 @@
                   width: 220px;
                 }
 
-                box-shadow: 0 16px 24px 2px rgba(#000, 0.14), 0 6px 30px 5px rgba(#000, 0.12),
-                  0 8px 10px -5px rgba(#000, 0.4);
+                box-shadow: 0 16px 24px 2px rgba(#000, 0.14),
+                0 6px 30px 5px rgba(#000, 0.12),
+                0 8px 10px -5px rgba(#000, 0.4);
 
                 &.main-options,
                 &.video-download-options {
@@ -1128,7 +1148,8 @@
           .nav-page-main,
           .nav-page-videoDownloadOptions {
             .popup {
-              > * {
+              >* {
+
                 &.main-options,
                 &.video-download-options {
                   width: 160px;
@@ -1147,7 +1168,7 @@
                     font-size: 13px;
                     font-weight: 400;
 
-                    > * {
+                    >* {
                       line-height: 48px;
                     }
                   }
@@ -1165,7 +1186,7 @@
             .popup-main {
               overflow: visible;
 
-              > div {
+              >div {
                 position: relative;
 
                 width: auto;
@@ -1197,7 +1218,7 @@
               box-shadow: none;
               background-color: transparent;
 
-              > * {
+              >* {
                 @media screen and (max-width: 1007px) {
                   width: 300px;
                 }
@@ -1210,8 +1231,9 @@
                   width: 220px;
                 }
 
-                box-shadow: 0 16px 24px 2px rgba(#000, 0.14), 0 6px 30px 5px rgba(#000, 0.12),
-                  0 8px 10px -5px rgba(#000, 0.4);
+                box-shadow: 0 16px 24px 2px rgba(#000, 0.14),
+                0 6px 30px 5px rgba(#000, 0.12),
+                0 8px 10px -5px rgba(#000, 0.4);
 
                 &.main-options,
                 &.video-download-options {
@@ -1235,11 +1257,10 @@
     }
 
     .disliked-media {
-      > * {
-        > * {
+      >* {
+        >* {
           &.dislike {
-            &:before {
-            }
+            &:before {}
           }
         }
       }
@@ -1249,17 +1270,16 @@
   .media-views-actions {
     &.liked-media {
       .media-actions {
-        > * {
-          > * {
+        >* {
+          >* {
+
             &.like,
             &.like button,
-            &.like .circle-icon-button {
-            }
+            &.like .circle-icon-button {}
 
             &.like,
             &.dislike {
-              &:before {
-              }
+              &:before {}
             }
           }
         }
@@ -1268,17 +1288,16 @@
 
     &.disliked-media {
       .media-actions {
-        > * {
-          > * {
+        >* {
+          >* {
+
             &.dislike,
             &.dislike button,
-            &.dislike .circle-icon-button {
-            }
+            &.dislike .circle-icon-button {}
 
             &.like,
             &.dislike {
-              &:before {
-              }
+              &:before {}
             }
           }
         }
@@ -1287,7 +1306,7 @@
   }
 }
 
-.nav-page-loggedInReportMedia .popup-main > div {
+.nav-page-loggedInReportMedia .popup-main>div {
   padding: 0 !important;
   max-width: 450px !important;
 }
@@ -1304,7 +1323,7 @@
   .form-field {
     padding: 24px 24px;
 
-    + .form-field {
+    +.form-field {
       padding: 0 24px 24px 24px;
     }
 
@@ -1399,7 +1418,7 @@
       margin: 16px 0 10px;
     }
 
-    > * {
+    >* {
       display: table-cell;
       vertical-align: middle;
     }
@@ -1437,23 +1456,27 @@
       line-height: 1.384615;
       font-family: inherit;
     }
+
+    button {
+      background-color: var(--theme-color, var(--default-theme-color));
+
+      .subscribed {
+        background-color: #F0F0F0
+      }
+    }
   }
 
   .media-content-banner {
     white-space: pre-wrap;
     overflow-wrap: break-word;
-
     font-size: 14px;
     line-height: 1.5;
-
     padding-bottom: 16px;
     margin-bottom: 8px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-
     padding-left: 16px;
     padding-right: 16px;
-
     margin-top: 20px;
 
     @media screen and (min-width: 640px) {
@@ -1469,7 +1492,7 @@
     .media-content-banner-inner {
       font-family: inherit;
 
-      > * {
+      >* {
         margin-bottom: 16px;
 
         &:last-child {
@@ -1483,6 +1506,7 @@
     }
 
     .media-content-description {
+
       p,
       ul {
         margin: 0;
@@ -1490,10 +1514,9 @@
     }
   }
 
-  .media-author-banner + .media-content-banner {
+  .media-author-banner+.media-content-banner {
     margin-top: 0;
     padding-top: 16px;
-
     border-top-width: 1px;
     border-top-style: solid;
 
@@ -1548,7 +1571,7 @@
 
   word-break: break-word;
 
-  > * {
+  >* {
     position: relative;
     display: inline-block;
     margin-right: 4px;
@@ -1602,8 +1625,7 @@
 .share-embed-popup {
   padding: 72px 0;
 
-  @media screen and (max-width: 1156px) {
-  }
+  @media screen and (max-width: 1156px) {}
 
   .popup-main {
     padding-left: 16px;
@@ -1623,8 +1645,7 @@
     width: 100%;
   }
 
-  .on-left {
-  }
+  .on-left {}
 
   .on-right {
     overflow: hidden;
@@ -1761,15 +1782,13 @@
           margin-right: 0;
 
           .value-input,
-          .value-unit {
-          }
+          .value-unit {}
 
           .value-input {
             max-width: 56%;
           }
 
-          .value-unit {
-          }
+          .value-unit {}
         }
       }
     }
@@ -1830,8 +1849,7 @@
       color: #fff;
     }
 
-    .circle-icon-button {
-    }
+    .circle-icon-button {}
 
     .video-js.vjs-mediacms {
       padding-top: math.div(9, 16) * 100%;
@@ -1865,9 +1883,11 @@
 }
 
 @media screen and (min-width: 1008px) {
+
   .viewer-sidebar,
   .sliding-sidebar .viewer-sidebar,
   .visible-sidebar .viewer-sidebar {
+
     .item-thumb,
     a.item-thumb {
       width: 168px;
@@ -1879,7 +1899,7 @@
     }
 
     .item-meta {
-      > * {
+      >* {
         &:nth-child(n + 2):before {
           display: none;
         }

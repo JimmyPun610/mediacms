@@ -5,7 +5,6 @@ let ENDPOINTS = null;
 
 function endpointsIter(ret, endpoints) {
   const baseUrl = BASE_URL.toString().replace(/\/+$/, '');
-
   for (let k in endpoints) {
     if ('string' === typeof endpoints[k]) {
       ret[k] = baseUrl + '/' + endpoints[k].replace(/^\//g, '');
@@ -26,6 +25,7 @@ export function init(base_url, endpoints) {
   BASE_URL = urlParse(base_url);
 
   ENDPOINTS = formatEndpoints({
+    channels: endpoints.channels,
     media: endpoints.media,
     featured: endpoints.media + '?show=featured',
     recommended: endpoints.media + '?show=recommended',

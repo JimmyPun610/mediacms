@@ -7,6 +7,7 @@ import { MediaItem as ImageItem } from './MediaItem';
 import { MediaItem as PdfItem } from './MediaItem';
 import { MediaItem as AttachmentItem } from './MediaItem';
 import { PlaylistItem } from './PlaylistItem';
+import { ChannelItem } from './ChannelItem';
 import { TaxonomyItem } from './TaxonomyItem';
 import { UserItem } from './UserItem';
 
@@ -52,6 +53,7 @@ function itemPageLink(props, item) {
     return LinksContext._currentValue.search.tag + item.title.replace(' ', '%20');
   }
 
+
   const playlistId = extractPlaylistId();
 
   if (props.inPlaylistView && playlistId) {
@@ -68,24 +70,43 @@ function itemPageLink(props, item) {
 export function listItemProps(props, item, index) {
   const isArchiveItem = props.inCategoriesList || props.inTagsList;
   const isUserItem = !isArchiveItem && void 0 !== item.username;
+  const isChannelItem =
+    (!isArchiveItem &&
+      !isUserItem &&
+      item.banner_logo?.length > 0);
+
   const isPlaylistItem =
     !isArchiveItem &&
     !isUserItem &&
+    !isChannelItem &&
     ('playlist' === item.media_type || (void 0 !== item.url && -1 < item.url.indexOf('playlists'))); // TODO: Improve this.
-  const isMediaItem = !isArchiveItem && !isUserItem && !isPlaylistItem;
+
+
+  const isMediaItem = !isArchiveItem && !isUserItem && !isPlaylistItem && !isChannelItem;
   const isSearchItem = 'search-results' === PageStore.get('current-page'); // TODO: Improve this.
+
 
   const url = {
     view: itemPageLink(props, item),
     edit: props.canEdit ? item.url.replace('view?m=', 'edit?m=') : null,
   };
 
+  if (isChannelItem) {
+    url.view = `../${item.title}`;
+  }
+
   if (window.MediaCMS.site.devEnv && -1 < url.view.indexOf('view?')) {
     url.view = '/media.html?' + url.view.split('view?')[1];
   }
 
-  const thumbnail = item.thumbnail_url || '';
-  const previewThumbnail = item.preview_url || '';
+  var thumbnail = item.thumbnail_url || '';
+  var previewThumbnail = item.preview_url || '';
+
+  if (isChannelItem) {
+    thumbnail = item.banner_logo;
+    previewThumbnail = item.banner_logo;
+  }
+
 
   let type, title, date, description, meta_description;
 
@@ -93,15 +114,15 @@ export function listItemProps(props, item, index) {
     void 0 !== item.username && 'string' === typeof item.username
       ? item.username
       : void 0 !== item.title && 'string' === typeof item.title
-      ? item.title
-      : null;
+        ? item.title
+        : null;
 
   date =
     void 0 !== item.date_added && 'string' === typeof item.date_added
       ? item.date_added
       : void 0 !== item.add_date && 'string' === typeof item.add_date
-      ? item.add_date
-      : null;
+        ? item.add_date
+        : null;
 
   // description = props.preferSummary && 'string' === typeof props.summary ? props.summary.trim() : ( 'string' === typeof item.description ? item.description.trim() : null );
   // description = null === description ? description : description.replace(/(<([^>]+)>)/ig,"");
@@ -112,6 +133,8 @@ export function listItemProps(props, item, index) {
     type = 'playlist';
   } else if (isMediaItem) {
     type = item.media_type;
+  } else if (isChannelItem) {
+    type = 'channel';
   }
 
   const taxonomyPage = {
@@ -183,8 +206,8 @@ export function listItemProps(props, item, index) {
       props.preferSummary && 'string' === typeof props.summary
         ? props.summary.trim()
         : 'string' === typeof item.description
-        ? item.description.trim()
-        : null;
+          ? item.description.trim()
+          : null;
     description = null === description ? description : description.replace(/(<([^>]+)>)/gi, '');
 
     if (isSearchItem || props.inCategoriesList || 'user' === type) {
@@ -236,7 +259,6 @@ export function listItemProps(props, item, index) {
 
 export function ListItem(props) {
   let isMediaItem = false;
-
   const args = {
     order: props.order,
     title: props.title,
@@ -267,6 +289,8 @@ export function ListItem(props) {
       break;
     case 'pdf':
       isMediaItem = true;
+      break;
+    case 'channel':
       break;
   }
 
@@ -338,6 +362,12 @@ export function ListItem(props) {
       return <ImageItem {...args} type="image" />;
     case 'pdf':
       return <PdfItem {...args} type="pdf" />;
+    case 'channel':
+      console.log(`args`)
+      console.log(args)
+      console.log(`props`)
+      console.log(props)
+      return <ChannelItem {...args} type="channel" />;
   }
 
   return <AttachmentItem {...args} type="attachment" />;

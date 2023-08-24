@@ -3,7 +3,7 @@ import { SiteContext } from '../../utils/contexts/';
 import { useUser, usePopup } from '../../utils/hooks/';
 import { PageStore, MediaPageStore } from '../../utils/stores/';
 import { PageActions, MediaPageActions } from '../../utils/actions/';
-import { formatInnerLink, publishedOnDate } from '../../utils/helpers/';
+import { formatInnerLink, postRequest, publishedOnDate, csrfToken, getRequest } from '../../utils/helpers/';
 import { PopupMain } from '../_shared/';
 import CommentsList from '../comments/Comments';
 
@@ -82,6 +82,86 @@ function EditMediaButton(props) {
   );
 }
 
+
+
+function ToggleSubscribeButton(props) {
+
+  const [channel, setChannel] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(undefined);
+
+  function getAuthorChannel() {
+    getRequest(
+      'api/v1/users/' + MediaPageStore.get('media-data').user,
+      {},
+      (response) => {
+        setChannel(response.data.default_channel_friendly_token);
+      },
+      null
+    );
+  }
+
+  function getIsSubscribed() {
+    getRequest(
+      'api/v1/channels?page=1',
+      {},
+      (response) => {
+        let subscribedChannel = response.data.results
+          .filter(o => {
+            return o.friendly_token == channel
+          });
+        setIsSubscribed(subscribedChannel.length > 0);
+      },
+      () => { console.log(`getIsSubscribed failed`) }
+    )
+  }
+
+  const toggleSubscription = async () => {
+    postRequest(
+      'api/v1/channels/' + channel + '/toggle-subscription',
+      {},
+      {
+        headers: {
+          'X-CSRFToken': csrfToken(),
+        },
+      },
+      null,
+      () => {
+        const isSubscribedNow = isSubscribed ? 'Unsubscribe' : 'Subscribe';
+        setIsSubscribed(!isSubscribed);
+        PageActions.addNotification(`${isSubscribedNow} channel success.`, 'toggleSubscriptionSuccess');
+      },
+      () => { console.log("toggleSubscription Failed") }
+    );
+  }
+
+  if (!channel)
+    getAuthorChannel();
+
+  if (channel?.length > 0 && isSubscribed == undefined) {
+    getIsSubscribed();
+  }
+
+  // Should call api to see if user subscribed or not
+  if (isSubscribed != undefined && channel) {
+    if (!isSubscribed) {
+      return (
+        <a href='javascript:void(0);' rel="nofollow" title="Subscribe" className="toggle-subscribe" onClick={toggleSubscription}>
+          SUBSCRIBE
+        </a>
+      );
+    } else {
+      return (
+        <a href='javascript:void(0);' rel="nofollow" title="Unsubscribe" className="toggle-subscribe" onClick={toggleSubscription}>
+          UNSUBSCRIBE
+        </a>
+      );
+    }
+  } else {
+    return null;
+  }
+
+}
+
 function EditSubtitleButton(props) {
   let link = props.link;
 
@@ -97,8 +177,9 @@ function EditSubtitleButton(props) {
 }
 
 export default function ViewerInfoContent(props) {
-  const { userCan } = useUser();
-
+  const { userCan, username } = useUser();
+  window.MediaCMS.profileId = username;
+  const userIsAuthor = username == MediaPageStore.get('media-data').user;
   const description = props.description.trim();
   const tagsContent =
     !PageStore.get('config-enabled').taxonomies.tags || PageStore.get('config-enabled').taxonomies.tags.enabled
@@ -108,8 +189,8 @@ export default function ViewerInfoContent(props) {
     ? []
     : !PageStore.get('config-enabled').taxonomies.categories ||
       PageStore.get('config-enabled').taxonomies.categories.enabled
-    ? metafield(MediaPageStore.get('media-categories'))
-    : [];
+      ? metafield(MediaPageStore.get('media-categories'))
+      : [];
 
   let summary = MediaPageStore.get('media-summary');
 
@@ -174,11 +255,16 @@ export default function ViewerInfoContent(props) {
   return (
     <div className="media-info-content">
       {void 0 === PageStore.get('config-media-item').displayAuthor ||
-      null === PageStore.get('config-media-item').displayAuthor ||
-      !!PageStore.get('config-media-item').displayAuthor ? (
+        null === PageStore.get('config-media-item').displayAuthor ||
+        !!PageStore.get('config-media-item').displayAuthor ? (
         <MediaAuthorBanner link={authorLink} thumb={authorThumb} name={props.author.name} published={props.published} />
       ) : null}
-
+      {!userIsAuthor ?
+        (
+          <div className='media-author-actions'>
+            <ToggleSubscribeButton />
+          </div>
+        ) : null}
       <div className="media-content-banner">
         <div className="media-content-banner-inner">
           {hasSummary ? <div className="media-content-summary">{summary}</div> : null}
@@ -205,8 +291,11 @@ export default function ViewerInfoContent(props) {
             />
           ) : null}
 
+
+
           {userCan.editMedia || userCan.editSubtitle || userCan.deleteMedia ? (
             <div className="media-author-actions">
+
               {userCan.editMedia ? <EditMediaButton link={MediaPageStore.get('media-data').edit_url} /> : null}
               {userCan.editSubtitle && 'video' === MediaPageStore.get('media-data').media_type ? (
                 <EditSubtitleButton

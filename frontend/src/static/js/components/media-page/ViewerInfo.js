@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MediaPageStore } from '../../utils/stores/';
 import ViewerInfoContent from './ViewerInfoContent';
 import ViewerInfoTitleBanner from './ViewerInfoTitleBanner';
+import { getRequest } from '../../utils/helpers/';
 
 export default class ViewerInfo extends React.PureComponent {
   constructor(props) {
@@ -14,6 +15,8 @@ export default class ViewerInfo extends React.PureComponent {
     this.onVideoLoad = this.onVideoLoad.bind(this);
 
     MediaPageStore.on('loaded_media_data', this.onVideoLoad);
+
+
   }
 
   onVideoLoad() {
@@ -22,11 +25,12 @@ export default class ViewerInfo extends React.PureComponent {
     });
   }
 
-  render() {
-    let views, categories, title, author, published, description;
-    let allowDownload = false;
 
-    if (this.state.videoLoaded) {
+  render() {
+    let views, categories, title, author, published, description, channel, isSubscribed;
+    let allowDownload = false;
+    let loading = !(this.state.videoLoaded && this.state.channel && this.state.isSubscribed != null);
+    if (!loading) {
       allowDownload = MediaPageStore.get('media-data').allow_download;
 
       if (void 0 === allowDownload) {
@@ -47,9 +51,11 @@ export default class ViewerInfo extends React.PureComponent {
 
       published = MediaPageStore.get('media-data').add_date;
       description = MediaPageStore.get('media-data').description;
+      channel = this.state.channel;
+      isSubscribed = this.state.isSubscribed;
     }
 
-    return !this.state.videoLoaded ? null : (
+    return loading ? null : (
       <div className="viewer-info">
         <div className="viewer-info-inner">
           <ViewerInfoTitleBanner title={title} views={views} categories={categories} allowDownload={allowDownload} />
