@@ -59,6 +59,18 @@ urlpatterns = [
         views.MediaActions.as_view(),
     ),
     re_path(r"^api/v1/categories$", views.CategoryList.as_view()),
+    
+    re_path(
+        r"^api/v1/categories/(?P<title>[\w]*)/allow-remove$",
+        views.category_allow_remove,
+        name="api_get_category_allow_remove",
+    ),
+    re_path(
+        r"^api/v1/categories/(?P<title>[\w]*)/delete$",
+        views.delete_category,
+        name="api_delete_category",
+    ),
+   
     re_path(r"^api/v1/tags$", views.TagList.as_view()),
     re_path(r"^api/v1/comments$", views.CommentList.as_view()),
     re_path(

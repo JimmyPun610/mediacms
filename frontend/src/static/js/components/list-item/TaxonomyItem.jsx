@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useItem } from '../../utils/hooks/';
-import { PositiveIntegerOrZero } from '../../utils/helpers/';
+import { PositiveIntegerOrZero, csrfToken, deleteRequest, getRequest } from '../../utils/helpers/';
 import { TaxonomyItemMediaCount, itemClassname } from './includes/items/';
 import { Item } from './Item';
+import { PageActions } from '../../utils/actions';
 
 export function TaxonomyItem(props) {
   const type = props.type;
-
   const { titleComponent, descriptionComponent, thumbnailUrl, UnderThumbWrapper } = useItem({ ...props, type });
+
+
+  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
 
   function thumbnailComponent() {
     const attr = {
@@ -30,6 +33,35 @@ export function TaxonomyItem(props) {
   }
 
   const containerClassname = itemClassname('item ' + type + '-item', props.class_name.trim(), false);
+  if (type == 'category') {
+    getRequest(
+      `api/v1/categories/${props.title}/allow-remove`,
+      {},
+      (response) => {
+        setShowDeleteBtn(response.data);
+      },
+      {}
+    )
+  }
+
+  function deleteCategory() {
+    if (confirm(`Are you use to remove category [${props.title}]?`) == true) {
+      deleteRequest(
+        `api/v1/categories/${props.title}/delete`,
+        { headers: { 'X-CSRFToken': csrfToken() } },
+        {},
+        (response) => {
+          if (response.status == 200) {
+            PageActions.addNotification(`Delete category ${props.title} success.`, 'deleteCategory');
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000)
+          }
+        },
+        {}
+      )
+    }
+  }
 
   return (
     <div className={containerClassname}>
@@ -41,6 +73,12 @@ export function TaxonomyItem(props) {
           {metaComponents()}
           {descriptionComponent()}
         </UnderThumbWrapper>
+
+        {!showDeleteBtn ? null :
+          (
+            <button type='button' className='delete-category-btn' onClick={deleteCategory}>Delete</button>
+          )
+        }
       </div>
     </div>
   );

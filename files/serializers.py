@@ -196,6 +196,7 @@ class CategorySerializer(serializers.ModelSerializer):
             "media_count",
             "user",
             "thumbnail_url",
+            "user_id"
         )
 
 

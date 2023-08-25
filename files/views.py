@@ -1,5 +1,9 @@
 from datetime import datetime, timedelta
+from math import e
+from nis import cat
+from operator import methodcaller
 
+from rest_framework.decorators import api_view
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -1317,9 +1321,49 @@ class UserActions(APIView):
         return paginator.get_paginated_response(serializer.data)
 
 
+@swagger_auto_schema(
+    methods=['get'],
+    manual_parameters=[
+        openapi.Parameter(name="title", in_=openapi.IN_PATH, type=openapi.TYPE_STRING, required=True, description="title"),
+    ],
+    tags=['Categories'],
+    operation_summary='Category details',
+    operation_description='Get category details',
+)
+@api_view(["GET"])
+def category_allow_remove(request, title):
+    user_id = request.user.id
+    categories = Category.objects.filter(title=title, user_id=user_id)
+    if(len(categories) == 0):
+        return Response(False, status.HTTP_200_OK)
+    category = categories.first()
+    allow_remove = category.media_count == 0;
+    return Response(allow_remove, status.HTTP_200_OK)
+
+@swagger_auto_schema(
+    methods=['delete'],
+    tags=['Categories'],
+    manual_parameters=[
+        openapi.Parameter(name="title", in_=openapi.IN_PATH, type=openapi.TYPE_STRING, required=True, description="title"),
+    ],
+    operation_summary='Delete category',
+    operation_description='Delete categories',
+    responses={200: 'OK', 404: 'Bad request'},
+)
+@api_view(['Delete'])
+def delete_category(request, title):
+    category = Category.objects.get(title=title)
+    if(category is None):
+        return Response({'details' : 'Category not found'}, status=status.HTTP_400_BAD_REQUEST)
+    elif(category.user_id != request.user.id):
+        return Response({'details' : 'You have no right to remove this category'}, status=status.HTTP_400_BAD_REQUEST)
+    category.delete()
+    return Response(True, status=status.HTTP_200_OK) 
+
+
 class CategoryList(APIView):
     """List categories"""
-
+    
     @swagger_auto_schema(
         manual_parameters=[],
         tags=['Categories'],
@@ -1334,7 +1378,34 @@ class CategoryList(APIView):
         serializer = CategorySerializer(categories, many=True, context={"request": request})
         ret = serializer.data
         return Response(ret)
+    
+    parser_classes = (FormParser,MultiPartParser)
+    serializer_class = CategorySerializer
 
+    @swagger_auto_schema(
+        tags=['Categories'],
+        manual_parameters=[
+            openapi.Parameter(name="title", in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True, description="title"),
+            openapi.Parameter(name="description", in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=False, description="description"),
+        ],
+        operation_summary='Create category',
+        operation_description='Create new categories',
+        responses={200: openapi.Response('Category details', CategorySerializer), 404: 'Bad request'},
+    )
+    def post(self, request):
+        title = request.data['title'];
+        description = request.data['description']
+        if(len(Category.objects.filter(title=title)) > 0):
+            return Response({'details' : 'Already have category with title [' + title + ']'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        newCategory = Category.objects.create(user_id=self.request.user.id,
+                                              title=title,
+                                              description=description,
+                                              is_global=False)
+        serializer = CategorySerializer(newCategory, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)        
+
+   
 
 class TagList(APIView):
     """List tags"""
