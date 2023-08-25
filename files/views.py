@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from math import e
 from nis import cat
 from operator import methodcaller
+from pickle import FALSE
 
 from rest_framework.decorators import api_view
 from django.conf import settings
@@ -1332,6 +1333,8 @@ class UserActions(APIView):
 )
 @api_view(["GET"])
 def category_allow_remove(request, title):
+    if(request.user.is_authenticated == False):
+        return Response(False, status.HTTP_200_OK)
     user_id = request.user.id
     categories = Category.objects.filter(title=title, user_id=user_id)
     if(len(categories) == 0):

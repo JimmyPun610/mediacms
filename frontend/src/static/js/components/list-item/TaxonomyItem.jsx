@@ -5,6 +5,7 @@ import { PositiveIntegerOrZero, csrfToken, deleteRequest, getRequest } from '../
 import { TaxonomyItemMediaCount, itemClassname } from './includes/items/';
 import { Item } from './Item';
 import { PageActions } from '../../utils/actions';
+import { MemberConsumer, MemberContext } from '../../utils/contexts';
 
 export function TaxonomyItem(props) {
   const type = props.type;
@@ -33,7 +34,7 @@ export function TaxonomyItem(props) {
   }
 
   const containerClassname = itemClassname('item ' + type + '-item', props.class_name.trim(), false);
-  if (type == 'category') {
+  if (type == 'category' && MemberContext._currentValue.username) {
     getRequest(
       `api/v1/categories/${props.title}/allow-remove`,
       {},
