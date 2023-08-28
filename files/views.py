@@ -68,9 +68,10 @@ from .serializers import (
 )
 from .stop_words import STOP_WORDS
 from .tasks import save_user_action
-
+from urllib.parse import unquote
 VALID_USER_ACTIONS = [action for action, name in USER_MEDIA_ACTIONS]
 
+from urllib.parse import unquote
 
 def about(request):
     """About view"""
@@ -1333,10 +1334,11 @@ class UserActions(APIView):
 )
 @api_view(["GET"])
 def category_allow_remove(request, title):
+    newTitle = unquote(title);
     if(request.user.is_authenticated == False):
         return Response(False, status.HTTP_200_OK)
     user_id = request.user.id
-    categories = Category.objects.filter(title=title, user_id=user_id)
+    categories = Category.objects.filter(title=newTitle, user_id=user_id)
     if(len(categories) == 0):
         return Response(False, status.HTTP_200_OK)
     category = categories.first()
@@ -1355,7 +1357,8 @@ def category_allow_remove(request, title):
 )
 @api_view(['Delete'])
 def delete_category(request, title):
-    category = Category.objects.get(title=title)
+    newTitle = unquote(title);
+    category = Category.objects.get(title=newTitle)
     if(category is None):
         return Response({'details' : 'Category not found'}, status=status.HTTP_400_BAD_REQUEST)
     elif(category.user_id != request.user.id):

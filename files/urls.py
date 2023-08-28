@@ -61,12 +61,12 @@ urlpatterns = [
     re_path(r"^api/v1/categories$", views.CategoryList.as_view()),
     
     re_path(
-        r"^api/v1/categories/(?P<title>[\w]*)/allow-remove$",
+        r"^api/v1/categories/(?P<title>.*)/allow-remove$",
         views.category_allow_remove,
         name="api_get_category_allow_remove",
     ),
     re_path(
-        r"^api/v1/categories/(?P<title>[\w]*)/delete$",
+        r"^api/v1/categories/(?P<title>.*)/delete$",
         views.delete_category,
         name="api_delete_category",
     ),

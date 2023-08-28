@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { Props, useRef, useState } from 'react';
 import './MediaListHeader.scss'
 import { CircleIconButton, MaterialIcon, NavigationContentApp, PopupMain } from './_shared/';
 import { csrfToken, postRequest } from '../utils/helpers';
 import { PageActions } from '../utils/actions';
 import { MemberConsumer } from '../utils/contexts';
+import { usePopup } from '../utils/hooks';
+import { PopupContent } from '../components/_shared/popup/PopupContent.jsx';
+import { PopupTrigger } from '../components/_shared/popup/PopupTrigger.jsx';
 
 interface MediaListHeaderProps {
   title?: string;
@@ -15,66 +18,66 @@ interface MediaListHeaderProps {
 
 export const MediaListHeader: React.FC<MediaListHeaderProps> = (props) => {
 
-  const [showCreateCategoryForm, setShowCreateCategoryForm] = useState(false);
-  const [categoryTitle, setCategoryTitle] = useState('');
-  const [categoryDesc, setCategoryDesc] = useState('');
+  function AddCategoryButton() {
+    const popupContentRef = useRef(null);
 
-  function showAddCategoryForm() {
-    resetCategoryFormDetails();
-    setShowCreateCategoryForm(true);
-  }
+    const [categoryTitle, setCategoryTitle] = useState('');
+    const [categoryDesc, setCategoryDesc] = useState('');
 
-  function cancelAddCategory() {
-    setShowCreateCategoryForm(false);
-  }
-
-  function confirmCreateCategory() {
-    let formData: FormData = new FormData();
-    formData.append('title', categoryTitle);
-    formData.append('description', categoryDesc);
-    postRequest(
-      'api/v1/categories',
-      formData,
-      {
-        headers: {
-          'X-CSRFToken': csrfToken(),
+    function showAddCategoryForm() {
+      resetCategoryFormDetails();
+      if (popupContentRef.current != null) {
+        (popupContentRef.current as any).toggle();
+      }
+    }
+    function cancelAddCategory() {
+      if (popupContentRef.current != null) {
+        (popupContentRef.current as any).toggle();
+      }
+    }
+    function confirmCreateCategory() {
+      let formData: FormData = new FormData();
+      formData.append('title', categoryTitle);
+      formData.append('description', categoryDesc);
+      postRequest(
+        'api/v1/categories',
+        formData,
+        {
+          headers: {
+            'X-CSRFToken': csrfToken(),
+          },
         },
-      },
-      null,
-      (r: any) => {
-        PageActions.addNotification(`Create category ${categoryTitle} success.`, 'createCategory');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000)
-      },
-      () => { console.log("createCategory Failed") }
-    );
+        null,
+        (r: any) => {
+          PageActions.addNotification(`Create category ${categoryTitle} success.`, 'createCategory');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000)
+        },
+        () => { console.log("createCategory Failed") }
+      );
+    }
 
-    setShowCreateCategoryForm(false);
-  }
+    function resetCategoryFormDetails() {
+      setCategoryTitle('')
+      setCategoryDesc('')
+    }
 
-  function resetCategoryFormDetails() {
-    setCategoryTitle('')
-    setCategoryDesc('')
-  }
+    function onTitleChange(t: string) {
+      setCategoryTitle(t)
+    }
+    function onDescChange(t: string) {
+      setCategoryDesc(t);
+    }
 
-  function onTitleChange(t: string) {
-    setCategoryTitle(t)
-  }
-  function onDescChange(t: string) {
-    setCategoryDesc(t);
-  }
-  const viewAllText = props.viewAllText || 'VIEW ALL';
-  return (
-    <MemberConsumer>
-      {(user) => (
-        <div className={(props.className ? props.className + ' ' : '') + 'media-list-header'} style={props.style}>
-          <h2>{props.title}</h2>
-          {props.title == 'Categories' && !user.is.anonymous ?
-            <button type='button' className='add-category-button' onClick={showAddCategoryForm}>Add Category</button>
-            : null
-          }
-          {!showCreateCategoryForm ? null :
+
+    return (
+      <span>
+        <PopupTrigger contentRef={popupContentRef}>
+          <button type='button' className='add-category-button' onClick={showAddCategoryForm}>Add Category</button>
+        </PopupTrigger>
+        <PopupContent contentRef={popupContentRef}>
+          <PopupMain>
             <div className='create-category-form'>
               <h3>Create Category</h3>
               <form>
@@ -87,10 +90,26 @@ export const MediaListHeader: React.FC<MediaListHeaderProps> = (props) => {
                   <input type='text' id='create-category-desc' name='create-category-desc' className='form-control' value={categoryDesc} onChange={e => onDescChange(e.target.value)} />
                 </div>
               </form>
-              <button className='cancel-add-category-button' onClick={cancelAddCategory}>Cancel</button>
-              <button className='confirm-add-category-button' onClick={confirmCreateCategory}>Create</button>
+              <button type='button' className='cancel-add-category-button' onClick={cancelAddCategory}>Cancel</button>
+              <button type='button' className='confirm-add-category-button' onClick={confirmCreateCategory}>Create</button>
             </div>
+          </PopupMain>
+        </PopupContent>
+      </span>
+    )
+  }
+
+  const viewAllText = props.viewAllText || 'VIEW ALL';
+  return (
+    <MemberConsumer>
+      {(user) => (
+        <div className={(props.className ? props.className + ' ' : '') + 'media-list-header'} style={props.style}>
+          <h2>{props.title}</h2>
+          {props.title == 'Categories' && !user.is.anonymous ?
+            <AddCategoryButton></AddCategoryButton>
+            : null
           }
+
           {props.viewAllLink ? (
             <h3>
               {' '}
